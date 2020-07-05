@@ -1,0 +1,20 @@
+{
+  "name": "khari-server",
+  "version": "1.0.0",
+  "description": "back-end application for Khari",
+  "main": "index.js",
+  "author": "Evan Gruère",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "debug": "DEBUG=khari ./bin/start"
+  },
+  "dependencies": {
+    "axios": "0.19.2",
+    "debug": "4.1.1",
+    "express": "^4.17.1",
+    "mongodb": "3.5.8",
+    "socket.io": "^2.3.0",
+    "validate.js": "^0.13.1"
+  }
+}
