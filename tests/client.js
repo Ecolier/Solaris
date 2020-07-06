@@ -1,5 +1,5 @@
 const { default: Axios } = require('axios')
-const { box } = require('../geography')
+const { box } = require('../src/geography')
 const io = require('socket.io-client')('http://localhost:5000')
 
 io.connect()

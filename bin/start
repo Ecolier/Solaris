@@ -3,13 +3,13 @@
 const debug = require('debug')('khari')
 
 const server = require('http').createServer(
-    require('../src/app')
+    require('../dist/application').default
 )
 
 const io = require('socket.io')(server)
-io.on('connect', require('../src/socket').onConnected)
+io.on('connect', require('../dist/socket').onConnected)
 
-require('../src/database').connect().then(() => {
+require('../dist/database').connect().then(() => {
     server.listen(5000, () => {
         debug(`application listening on port 5000`)
     })

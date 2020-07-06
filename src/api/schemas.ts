@@ -1,8 +1,8 @@
-const loginSchema = {
+const login = {
     username: { presence: true },
     password: { presence: true },
 }
 
-module.exports = {
-    loginSchema
+export {
+    login
 }
