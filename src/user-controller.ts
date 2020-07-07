@@ -10,14 +10,14 @@ const register = (): User => {
 
     database().collection('user').insertOne({
         username: username,
-        password: password
+        password: password,
     })
 
     return {
         username: username,
         password: password,
         latitude: 0, 
-        longitude: 0
+        longitude: 0,
     }
 }
 
@@ -26,7 +26,7 @@ const login = async (username: String, password: String): Promise<User | void> =
     const result = await database().collection('user').findOne({
         $and: [
             { username : username },
-            { password: password }
+            { password: password },
         ]
     })
 
@@ -35,12 +35,13 @@ const login = async (username: String, password: String): Promise<User | void> =
     return {
         username: result.username,
         password: result.password,
-        longitude: result.location.coordinates[0],
-        latitude: result.location.coordinates[1]
+        longitude: result.location?.coordinates[0] ?? 0,
+        latitude: result.location?.coordinates[1] ?? 0,
     }
+
 }
 
 export { 
-    register, 
-    login 
+    register,
+    login,
 }

@@ -1,5 +1,6 @@
+const config = require('./config.json')
 const { default: Axios } = require('axios')
 
-Axios.get('http://localhost:5000/user').then((response) => {
+Axios.get(`${config.endpoint}/user`).then((response) => {
     console.log(response.data)
 })

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import validate from 'validate.js'
+const validate = require('validate.js')
 
 import { database } from '../database'
 import * as schemas from './schemas'

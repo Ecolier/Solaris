@@ -39,18 +39,25 @@ const discoverStrangers = async (socket: Socket, request: any) => {
         latitude: user.latitude
     }, 5)
 
-    const results = await database().collection('user').find({
+    const results = database().collection('user').find({
         $and: [
             { username: { $ne: username } },
-            { "location.coordinates.0":  { $gt: bounds.minLng }},
-            { "location.coordinates.0":  { $lt: bounds.maxLng }},
-            { "location.coordinates.1":  { $gt: bounds.minLat }},
-            { "location.coordinates.1":  { $lt: bounds.maxLat }},
+            { 'location.coordinates.0':  { $gt: bounds.minLng }},
+            { 'location.coordinates.0':  { $lt: bounds.maxLng }},
+            { 'location.coordinates.1':  { $gt: bounds.minLat }},
+            { 'location.coordinates.1':  { $lt: bounds.maxLat }},
         ]
-    }, { projection: { _id: 0, password: 0 }})
-    .toArray()
+    })
 
-    const strangers = results.map((result) => {
+    results.forEach(async (doc) => {
+        
+        await database().collection('user').updateOne({
+            _id: doc._id
+        }, { $addToSet: { seenBy: user.username }})
+
+    })
+
+    const strangers = (await results.toArray()).map((result) => {
         return {
             username: result.username,
             longitude: result.location.coordinates[0],
