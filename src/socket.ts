@@ -1,70 +1,44 @@
 import { database } from './database'
-import { coordsToPoint, box } from './geography'
-import { AuthenticationController }from './controllers/authentication-controller'
+import { AuthenticationController } from './controllers/authentication-controller'
+import { LocationController } from './controllers/location-controller'
+import { box } from './geography'
 
 import { Socket } from 'socket.io'
+import { PrivacyController } from './controllers/privacy-controller'
 
 const onConnected = (socket: Socket) => {
     socket.on('update location', (args: any) => { updateLocation(socket, args) })
-    socket.on('discover strangers', (args: any) => { discoverStrangers(socket, args) })
 }
 
 const updateLocation = async (socket: Socket, request: any) => {
-    
-    await database().collection('user').updateOne({
-        $and: [
-            { username : request.username },
-            { password: request.password },
-        ]
-    }, 
-    {
-        $set: {
-            location: coordsToPoint(request.longitude, request.latitude)
-        }
-    })
-
-}
-
-const discoverStrangers = async (socket: Socket, request: any) => {
 
     const username = request.username
     const password = request.password
+    const longitude = request.longitude
+    const latitude = request.latitude
 
-    const authenticationController = new AuthenticationController(database())
+    const authenticationController = new AuthenticationController(
+        database().collection('user')
+    )
 
     const user = await authenticationController.login(username, password)
 
-    if (!user) { return }
+    if (!user) { 
+        return socket.emit('authentication error')
+    }
 
-    const bounds = box({
-        longitude: user.longitude,
-        latitude: user.latitude
-    }, 5)
+    const locationController = new LocationController(
+        user, database().collection('user')
+    )
 
-    const results = database().collection('user').find({
-        $and: [
-            { username: { $ne: username } },
-            { 'location.coordinates.0':  { $gt: bounds.minLng }},
-            { 'location.coordinates.0':  { $lt: bounds.maxLng }},
-            { 'location.coordinates.1':  { $gt: bounds.minLat }},
-            { 'location.coordinates.1':  { $lt: bounds.maxLat }},
-        ]
-    })
+    locationController.updateLocation(longitude, latitude)
 
-    results.forEach(async (doc) => {
-        
-        await database().collection('user').updateOne({
-            _id: doc._id
-        }, { $addToSet: { seenBy: user.username }})
+    const bounds = box(user.longitude, user.latitude, 5)
+    const strangers = await locationController.findInBounds(bounds[0], bounds[1], bounds[2], bounds[3])
 
-    })
-
-    const strangers = (await results.toArray()).map((result) => {
-        return {
-            username: result.username,
-            longitude: result.location.coordinates[0],
-            latitude: result.location.coordinates[1],
-        }
+    strangers.forEach(async (stranger) => {
+        let privacyController = new PrivacyController(stranger, database().collection('user'))
+        privacyController.setSeenBy(user.username)
     })
 
     socket.emit('strangers discovered', ...strangers)

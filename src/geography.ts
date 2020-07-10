@@ -8,13 +8,13 @@ const pointToCoords = (point: any): Coordinates => {
     return { longitude: point.coordinates[0], latitude: point.coordinates[1] }
 }
 
-const box = (coordinates: Coordinates, distance: number) => {
+const box = (longitude: number, latitude: number, distance: number): [number, number, number, number] => {
     const earthRadius = 6371
-    const minLat = coordinates.latitude  - (distance / earthRadius) * (180 / Math.PI)
-    const minLng = coordinates.longitude - (distance / earthRadius) * (180 / Math.PI) / Math.cos(coordinates.latitude * Math.PI / 180)
-    const maxLat = coordinates.latitude  + (distance / earthRadius) * (180 / Math.PI)
-    const maxLng = coordinates.longitude + (distance / earthRadius) * (180 / Math.PI) / Math.cos(coordinates.latitude * Math.PI / 180)
-    return { minLat: minLat, minLng: minLng, maxLat: maxLat, maxLng: maxLng }
+    const minLat = latitude  - (distance / earthRadius) * (180 / Math.PI)
+    const minLng = longitude - (distance / earthRadius) * (180 / Math.PI) / Math.cos(latitude * Math.PI / 180)
+    const maxLat = latitude  + (distance / earthRadius) * (180 / Math.PI)
+    const maxLng = longitude + (distance / earthRadius) * (180 / Math.PI) / Math.cos(latitude * Math.PI / 180)
+    return [minLng, maxLng, minLat, maxLat]
 }
 
 export {

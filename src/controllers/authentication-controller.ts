@@ -1,17 +1,17 @@
 import { User } from '../models/user'
 import { randomBytes } from 'crypto'
-import { Db } from 'mongodb'
+import { Collection } from 'mongodb'
  
 export class AuthenticationController {
 
-    constructor (private readonly database: Db) { }
+    constructor (private readonly collection: Collection) { }
 
     register (): User {
     
         const username = randomBytes(4).toString('hex')
         const password = randomBytes(4).toString('hex')
     
-        this.database.collection('user').insertOne({
+        this.collection.insertOne({
             username: username,
             password: password,
         })
@@ -26,7 +26,7 @@ export class AuthenticationController {
 
     async login (username: String, password: String): Promise<User | void> {
 
-        const result = await this.database.collection('user').findOne({
+        const result = await this.collection.findOne({
             $and: [
                 { username : username },
                 { password: password },

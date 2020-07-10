@@ -3,11 +3,11 @@ import { database } from '../database'
 import { AuthenticationController } from '../controllers/authentication-controller'
 import { PrivacyController } from '../controllers/privacy-controller'
 
-const db = database()
 const privacyRouter = Router()
-const authenticationController = new AuthenticationController(db)
 
 privacyRouter.post('/', async (req, res, next) => {
+
+    const authenticationController = new AuthenticationController(database().collection('user'))
 
     const user = await authenticationController.login(
         req.body.username, 
@@ -18,9 +18,12 @@ privacyRouter.post('/', async (req, res, next) => {
         return next('router')
     }
 
-    const privacyController = new PrivacyController(user, db.collection('user'))
+    const privacyController = new PrivacyController(user, database().collection('user'))
 
-    privacyController.hideFrom(req.body.target)
+    switch (req.body.mode) {
+        case 'hidden': privacyController.setHiddenFrom(req.body.target)
+        case 'visible': privacyController.setVisibleBy(req.body.target)
+    }
 
 })
     
