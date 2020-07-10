@@ -1,5 +1,6 @@
 const { default: Axios } = require('axios')
 const randomLocation = require('./common/random-location')
+const config = require('./config.json')
 const io = require('socket.io-client')('http://localhost:5000')
 
 io.connect()
@@ -11,8 +12,8 @@ Axios.get('http://localhost:5000/user').then((response) => {
     console.log(user)
 
     const random = randomLocation({
-        longitude: 5.729367162103489, 
-        latitude: 45.19205106516721
+        longitude: config.longitude, 
+        latitude: config.latitude
     }, 1)
 
     io.emit('update location', {

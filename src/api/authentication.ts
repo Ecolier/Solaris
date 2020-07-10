@@ -3,12 +3,13 @@ const validate = require('validate.js')
 
 import { database } from '../database'
 import * as schemas from './schemas'
-import * as userController from '../user-controller'
+import { AuthenticationController } from '../controllers/authentication-controller'
 
 const authenticationRouter = Router()
+const authenticationController = new AuthenticationController(database())
 
 authenticationRouter.get('/', async (req, res, next) => {
-    res.send(userController.register())
+    res.send(authenticationController.register())
 })
 
 authenticationRouter.post('/', async (req, res, next) => {
@@ -21,7 +22,7 @@ authenticationRouter.post('/', async (req, res, next) => {
     const username = req.body.username
     const password = req.body.password
 
-    const user = await userController.login(username, password)
+    const user = await authenticationController.login(username, password)
     
     res.send(user)
 })

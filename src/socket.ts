@@ -1,6 +1,6 @@
 import { database } from './database'
 import { coordsToPoint, box } from './geography'
-import * as userController from './user-controller'
+import { AuthenticationController }from './controllers/authentication-controller'
 
 import { Socket } from 'socket.io'
 
@@ -30,7 +30,9 @@ const discoverStrangers = async (socket: Socket, request: any) => {
     const username = request.username
     const password = request.password
 
-    const user = await userController.login(username, password)
+    const authenticationController = new AuthenticationController(database())
+
+    const user = await authenticationController.login(username, password)
 
     if (!user) { return }
 
