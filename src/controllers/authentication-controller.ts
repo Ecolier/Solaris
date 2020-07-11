@@ -24,7 +24,7 @@ export class AuthenticationController {
         }
     }
 
-    async login (username: String, password: String): Promise<User | void> {
+    async login (username: string, password: string): Promise<User | void> {
 
         const result = await this.collection.findOne({
             $and: [
