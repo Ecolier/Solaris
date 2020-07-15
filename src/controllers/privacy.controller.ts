@@ -7,13 +7,13 @@ export class PrivacyController {
         private readonly user: User,
         private readonly collection: Collection) { }
 
-    setSeenBy (username: String) {
+    async setSeenBy (username: String) {
         this.collection.updateOne({
             username: this.user.username
         }, { $addToSet: { seenBy: username }})
     }
 
-    setVisibleBy (username: String) {
+    async setVisibleBy (username: String) {
         
         this.collection.updateOne(
             { username: this.user.username }, 
@@ -27,7 +27,7 @@ export class PrivacyController {
         )
     }
 
-    setHiddenFrom (username: String) {
+    async setHiddenFrom (username: String) {
 
         // Hide me from targeted user
         this.collection.updateOne(

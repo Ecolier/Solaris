@@ -1,13 +1,14 @@
-import { database } from './database'
-import { AuthenticationController } from './controllers/authentication-controller'
-import { LocationController } from './controllers/location-controller'
+import { getDatabase } from './database'
+import { AuthenticationController } from './controllers/authentication.controller'
+import { LocationController } from './controllers/location.controller'
 import { box } from './geography'
 
 import { Socket } from 'socket.io'
-import { PrivacyController } from './controllers/privacy-controller'
+import { PrivacyController } from './controllers/privacy.controller'
 
 const onConnected = (socket: Socket) => {
     socket.on('update location', (args: any) => { updateLocation(socket, args) })
+    socket.emit('connect')
 }
 
 const updateLocation = async (socket: Socket, request: any) => {
@@ -18,7 +19,7 @@ const updateLocation = async (socket: Socket, request: any) => {
     const latitude = request.latitude
 
     const authenticationController = new AuthenticationController(
-        database().collection('user')
+        getDatabase().collection('user')
     )
 
     const user = await authenticationController.login(username, password)
@@ -28,7 +29,7 @@ const updateLocation = async (socket: Socket, request: any) => {
     }
 
     const locationController = new LocationController(
-        user, database().collection('user')
+        user, getDatabase().collection('user')
     )
 
     locationController.updateLocation(longitude, latitude)
@@ -37,7 +38,7 @@ const updateLocation = async (socket: Socket, request: any) => {
     const strangers = await locationController.findInBounds(bounds[0], bounds[1], bounds[2], bounds[3])
 
     strangers.forEach(async (stranger) => {
-        let privacyController = new PrivacyController(stranger, database().collection('user'))
+        let privacyController = new PrivacyController(stranger, getDatabase().collection('user'))
         privacyController.setSeenBy(user.username)
     })
 

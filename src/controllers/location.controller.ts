@@ -10,7 +10,7 @@ export class LocationController {
         private readonly collection: Collection) { }
 
     async updateLocation (longitude: number, latitude: number) {
-        await this.collection.updateOne({
+        this.collection.updateOne({
             $and: [
                 { username : this.user.username },
                 { password: this.user.password },
@@ -26,7 +26,8 @@ export class LocationController {
     async findInBounds (minLng: number, maxLng: number, minLat: number, maxLat: number): Promise<User[]> {
         const results = await this.collection.find({
             $and: [
-                { username: { $ne: this.user.username } },
+                { username: { $ne: this.user.username }},
+                { hiddenFrom: { $ne: this.user.username }},
                 { 'location.coordinates.0':  { $gt: minLng }},
                 { 'location.coordinates.0':  { $lt: maxLng }},
                 { 'location.coordinates.1':  { $gt: minLat }},
@@ -42,7 +43,6 @@ export class LocationController {
                 latitude: result.location.coordinates[1]
             }
         })
-
     }
 
 }

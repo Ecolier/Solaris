@@ -7,11 +7,11 @@ const connect = async () => {
     _database = client.db('test')
 }
 
-const database = (): Db => {
+const getDatabase = (): Db => {
     return _database
 }
 
 export { 
-    database, 
+    getDatabase, 
     connect
 }
