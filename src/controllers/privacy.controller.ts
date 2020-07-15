@@ -1,10 +1,11 @@
 import { Collection } from 'mongodb'
 import { User } from '../models/user'
+import { Stranger } from '../models/stranger'
  
 export class PrivacyController {
 
     constructor (
-        private readonly user: User,
+        private readonly user: User | Stranger,
         private readonly collection: Collection) { }
 
     async setSeenBy (username: String) {

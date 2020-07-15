@@ -29,13 +29,14 @@ privacyRouter.get('/', async (req, res, next) => {
     const privacyController = new PrivacyController(res.locals.user, res.locals.userCollection)
     const isHiddenFromUser = await privacyController.isHiddenFrom(req.query.target)
 
-    res.send(isHiddenFromUser)
+    return res.send(isHiddenFromUser)
 
 })
 
 privacyRouter.get('/hidden', async (req, res, next) => {
 
     const privacyController = new PrivacyController(res.locals.user, res.locals.userCollection)
+
 
 })
     

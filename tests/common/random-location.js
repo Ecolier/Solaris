@@ -1,12 +1,12 @@
 const { box } = require('../../dist/geography')
 
-module.exports = (coordinates, distance) => {
+module.exports = (longitude, latitude, distance) => {
 
-    const bounds = box(coordinates, distance)
+    const bounds = box(longitude, latitude, distance)
     
     return {
-        latitude: Math.random() * (bounds.maxLat - bounds.minLat) + bounds.minLat,
-        longitude: Math.random() * (bounds.maxLng - bounds.minLng) + bounds.minLng
+        latitude: Math.random() * (bounds[3] - bounds[2]) + bounds[2],
+        longitude: Math.random() * (bounds[1] - bounds[0]) + bounds[0]
     }
 
 }

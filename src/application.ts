@@ -17,7 +17,8 @@ application.use((req, res, next) => {
 
 application.use(express.json())
 application.use('/auth', authenticationRouter)
-application.use('/user/privacy', privacyRouter)
+
+userRouter.use('/privacy', privacyRouter)
 application.use('/user', userRouter)
 
 export default application

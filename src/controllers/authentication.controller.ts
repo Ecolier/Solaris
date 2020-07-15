@@ -21,6 +21,7 @@ export class AuthenticationController {
             password: password,
             latitude: 0, 
             longitude: 0,
+            hiddenFrom: []
         }
     }
 
@@ -40,6 +41,7 @@ export class AuthenticationController {
             password: result.password,
             longitude: result.location?.coordinates[0] ?? 0,
             latitude: result.location?.coordinates[1] ?? 0,
+            hiddenFrom: result.hiddenFrom
         }
     
     }

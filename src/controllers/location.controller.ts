@@ -23,7 +23,7 @@ export class LocationController {
         })
     }
 
-    async findInBounds (minLng: number, maxLng: number, minLat: number, maxLat: number): Promise<User[]> {
+    async findInBounds (minLng: number, maxLng: number, minLat: number, maxLat: number): Promise<Stranger[]> {
         const results = await this.collection.find({
             $and: [
                 { username: { $ne: this.user.username }},
@@ -38,7 +38,6 @@ export class LocationController {
         return results.map((result) => {
             return {
                 username: result.username,
-                password: result.password,
                 longitude: result.location.coordinates[0],
                 latitude: result.location.coordinates[1]
             }
