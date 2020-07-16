@@ -3,31 +3,31 @@ import { PrivacyController } from '../controllers/privacy.controller'
 
 const privacyRouter = Router()
 
-privacyRouter.post('/', async (req, res, next) => {
+privacyRouter.post('/mode', async (req, res, next) => {
 
-    const privacyController = new PrivacyController(res.locals.user, res.locals.userCollection)
+    const privacyController = new PrivacyController(res.locals.userCollection)
 
     switch (req.body.mode) {
         case 'hidden': { 
-            privacyController.setHiddenFrom(req.body.target) 
+            privacyController.setHiddenFrom(res.locals.user, req.body.target) 
             break
         }
         case 'visible': { 
-            privacyController.setVisibleBy(req.body.target) 
+            privacyController.setVisibleBy(res.locals.user, req.body.target) 
             break
         }
     }
 
 })
 
-privacyRouter.get('/', async (req, res, next) => {
+privacyRouter.get('/mode', async (req, res, next) => {
 
     if (typeof req.query.target !== 'string') {
         return res.status(400).send()
     }
 
-    const privacyController = new PrivacyController(res.locals.user, res.locals.userCollection)
-    const isHiddenFromUser = await privacyController.isHiddenFrom(req.query.target)
+    const privacyController = new PrivacyController(res.locals.userCollection)
+    const isHiddenFromUser = await privacyController.isHiddenFrom(res.locals.user, req.query.target)
 
     return res.send(isHiddenFromUser)
 
@@ -35,7 +35,7 @@ privacyRouter.get('/', async (req, res, next) => {
 
 privacyRouter.get('/hidden', async (req, res, next) => {
 
-    const privacyController = new PrivacyController(res.locals.user, res.locals.userCollection)
+    const privacyController = new PrivacyController(res.locals.userCollection)
 
 
 })

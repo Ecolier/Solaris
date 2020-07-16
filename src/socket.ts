@@ -37,9 +37,9 @@ const updateLocation = async (socket: Socket, request: any) => {
     const bounds = box(user.longitude, user.latitude, 5)
     const strangers = await locationController.findInBounds(bounds[0], bounds[1], bounds[2], bounds[3])
 
+    let privacyController = new PrivacyController(getDatabase().collection('user'))
     strangers.forEach(async (stranger) => {
-        let privacyController = new PrivacyController(stranger, getDatabase().collection('user'))
-        privacyController.setSeenBy(user.username)
+        privacyController.setSeenBy(stranger.username, user.username)
     })
 
     socket.emit('strangers discovered', ...strangers)
