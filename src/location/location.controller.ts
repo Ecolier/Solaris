@@ -11,10 +11,7 @@ export class LocationController {
 
     async updateLocation (longitude: number, latitude: number) {
         this.collection.updateOne({
-            $and: [
-                { username : this.user.username },
-                { password: this.user.password },
-            ]
+            username : this.user.username
         }, 
         {
             $set: {

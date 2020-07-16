@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+require('dotenv').config()
 const debug = require('debug')('khari')
 
 const server = require('http').createServer(
@@ -9,7 +10,7 @@ const server = require('http').createServer(
 const io = require('socket.io')(server)
 io.on('connect', require('../dist/socket').onConnected)
 
-require('../dist/database').connect().then(() => {
+require('../dist/common/database').connect().then(() => {
     server.listen(5000, () => {
         debug(`application listening on port 5000`)
     })

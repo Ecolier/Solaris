@@ -8,18 +8,12 @@ const authenticationRouter = Router()
 
 authenticationRouter.get('/register', async (req, res, next) => {
     const authenticationController = new AuthenticationController(getDatabase().collection('user'))
-    res.send(await authenticationController.register())
+    const token = await authenticationController.register()
+    return res.json({ token: token })
 })
 
-authenticationRouter.post('/login', passport.authenticate('local'), async (req, res, next) => {
-
-    if (typeof req.body.username !== 'string' ||
-        typeof req.body.password !== 'string') {
-        return res.status(400).send()
-    }
-    
-    const authenticationController = new AuthenticationController(res.locals.userCollection)
-    return res.send(await authenticationController.login(req.body.username, req.body.password))
+authenticationRouter.get('/login', passport.authenticate('jwt', { session: false}), async (req, res, next) => {
+    return res.send(req.user)
 })
 
 export default authenticationRouter

@@ -2,31 +2,45 @@ import { User } from '../models/user'
 import { randomBytes } from 'crypto'
 import { Collection } from 'mongodb'
 import * as bcrypt from 'bcrypt'
+import * as jwt from 'jsonwebtoken'
  
 export class AuthenticationController {
 
     constructor (private readonly collection: Collection) { }
 
-    async register (): Promise<User> {
+    async register (): Promise<any> {
     
         const username = randomBytes(4).toString('hex')
-        
-        return bcrypt.hash(randomBytes(4).toString('hex'), 10).then((password) => {
+        const password = bcrypt.hashSync(randomBytes(4).toString('hex'), 10)
             
-            this.collection.insertOne({
-                username: username,
-                password: password,
-            })
-        
-            return {
-                username: username,
-                password: password,
-                latitude: 0, 
-                longitude: 0,
-                hiddenFrom: []
-            }
+        this.collection.insertOne({
+            username: username,
+            password: password,
         })
+        
 
+        if (typeof process.env.JWT_KEY !== 'string') {
+            return
+        }
+
+        return jwt.sign({ username: username }, process.env.JWT_KEY)
+
+    }
+
+    async findUser (username: string): Promise<User | void> {
+        
+        const result = await this.collection.findOne({
+            username: username 
+        })
+    
+        if (result == null) { return }
+    
+        return {
+            username: result.username,
+            longitude: result.location?.coordinates[0] ?? 0,
+            latitude: result.location?.coordinates[1] ?? 0,
+            hiddenFrom: result.hiddenFrom ?? []
+        }
     }
 
     async login (username: string, password: string): Promise<User | void> {
@@ -42,10 +56,9 @@ export class AuthenticationController {
     
         return {
             username: result.username,
-            password: result.password,
             longitude: result.location?.coordinates[0] ?? 0,
             latitude: result.location?.coordinates[1] ?? 0,
-            hiddenFrom: result.hiddenFrom
+            hiddenFrom: result.hiddenFrom ?? []
         }
     
     }
