@@ -1,9 +1,9 @@
 import { Router } from 'express'
-import { AuthenticationController } from '../controllers/authentication.controller'
+import { AuthenticationController } from './authentication.controller'
 
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
-import { getDatabase } from '../database'
+import { getDatabase } from '../common/database'
 
 const userRouter = Router()
 

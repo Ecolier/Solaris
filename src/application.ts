@@ -1,13 +1,14 @@
 import express from 'express'
 
-import authenticationRouter from './routes/authentication.route'
-import privacyRouter from './routes/privacy.route'
-import userRouter from './routes/user.route'
+import authenticationRouter from './authentication/authentication.route'
+import privacyRouter from './privacy/privacy.route'
+import userRouter from './authentication/user.route'
 
-import { getDatabase } from './database'
+import { getDatabase } from './common/database'
 import passport from 'passport'
 
 const application = express()
+
 application.use(express.json())
 application.use(passport.initialize())
 application.use(passport.session())

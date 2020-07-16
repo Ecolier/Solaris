@@ -1,4 +1,4 @@
-import { Coordinates } from "./models/coordinates"
+import { Coordinates } from "../models/coordinates"
 
 const coordsToPoint = (longitude: number, latitude: number): any => {
     return { type: 'Point', coordinates: [longitude, latitude] }

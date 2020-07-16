@@ -1,13 +1,14 @@
 import { Router } from 'express'
-import { AuthenticationController } from '../controllers/authentication.controller'
+import { AuthenticationController } from './authentication.controller'
+import { getDatabase } from '../common/database'
 
 const passport = require('passport')
 
 const authenticationRouter = Router()
 
 authenticationRouter.get('/register', async (req, res, next) => {
-    const authenticationController = new AuthenticationController(res.locals.userCollection)
-    res.send(authenticationController.register())
+    const authenticationController = new AuthenticationController(getDatabase().collection('user'))
+    res.send(await authenticationController.register())
 })
 
 authenticationRouter.post('/login', passport.authenticate('local'), async (req, res, next) => {

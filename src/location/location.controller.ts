@@ -1,6 +1,6 @@
 import { Collection } from 'mongodb'
 import { User } from '../models/user'
-import { coordsToPoint, box } from '../geography'
+import { coordsToPoint, box } from '../common/geography'
 import { Stranger } from '../models/stranger'
  
 export class LocationController {

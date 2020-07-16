@@ -1,28 +1,32 @@
 import { User } from '../models/user'
 import { randomBytes } from 'crypto'
 import { Collection } from 'mongodb'
+import * as bcrypt from 'bcrypt'
  
 export class AuthenticationController {
 
     constructor (private readonly collection: Collection) { }
 
-    register (): User {
+    async register (): Promise<User> {
     
         const username = randomBytes(4).toString('hex')
-        const password = randomBytes(4).toString('hex')
-    
-        this.collection.insertOne({
-            username: username,
-            password: password,
+        
+        return bcrypt.hash(randomBytes(4).toString('hex'), 10).then((password) => {
+            
+            this.collection.insertOne({
+                username: username,
+                password: password,
+            })
+        
+            return {
+                username: username,
+                password: password,
+                latitude: 0, 
+                longitude: 0,
+                hiddenFrom: []
+            }
         })
-    
-        return {
-            username: username,
-            password: password,
-            latitude: 0, 
-            longitude: 0,
-            hiddenFrom: []
-        }
+
     }
 
     async login (username: string, password: string): Promise<User | void> {

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { PrivacyController } from '../controllers/privacy.controller'
+import { PrivacyController } from './privacy.controller'
 
 const privacyRouter = Router()
 

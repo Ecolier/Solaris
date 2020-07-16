@@ -1,10 +1,10 @@
-import { getDatabase } from './database'
-import { AuthenticationController } from './controllers/authentication.controller'
-import { LocationController } from './controllers/location.controller'
-import { box } from './geography'
+import { getDatabase } from './common/database'
+import { AuthenticationController } from './authentication/authentication.controller'
+import { LocationController } from './location/location.controller'
+import { box } from './common/geography'
 
 import { Socket } from 'socket.io'
-import { PrivacyController } from './controllers/privacy.controller'
+import { PrivacyController } from './privacy/privacy.controller'
 
 const onConnected = (socket: Socket) => {
     socket.on('update location', (args: any) => { updateLocation(socket, args) })
