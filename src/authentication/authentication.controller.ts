@@ -3,10 +3,11 @@ import { randomBytes } from 'crypto'
 import { Collection } from 'mongodb'
 import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
+import { getUserCollection } from '../database'
  
 export class AuthenticationController {
 
-    constructor (private readonly collection: Collection) { }
+    private readonly collection = getUserCollection()
 
     async register (): Promise<any> {
     

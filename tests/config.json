@@ -2,6 +2,6 @@
     "endpoint": "http://localhost:5000",
     "username": "12345678",
     "password": "ABCDEF12",
-    "longitude": 6.327278507819222,
-    "latitude": 45.88396761314536
+    "longitude": 5.7287512371681935, 
+    "latitude": 45.19250772527044
 }

@@ -2,16 +2,15 @@ import { Collection } from 'mongodb'
 import { User } from '../models/user'
 import { coordsToPoint, box } from '../common/geography'
 import { Stranger } from '../models/stranger'
+import { getUserCollection } from '../database'
  
 export class LocationController {
 
-    constructor (
-        private readonly user: User,
-        private readonly collection: Collection) { }
+    private readonly collection = getUserCollection()
 
-    async updateLocation (longitude: number, latitude: number) {
+    async updateLocation (username: string, longitude: number, latitude: number) {
         this.collection.updateOne({
-            username : this.user.username
+            username : username
         }, 
         {
             $set: {
@@ -20,11 +19,11 @@ export class LocationController {
         })
     }
 
-    async findInBounds (minLng: number, maxLng: number, minLat: number, maxLat: number): Promise<Stranger[]> {
+    async findInBounds (username: string, minLng: number, maxLng: number, minLat: number, maxLat: number): Promise<Stranger[]> {
         const results = await this.collection.find({
             $and: [
-                { username: { $ne: this.user.username }},
-                { hiddenFrom: { $ne: this.user.username }},
+                { username: { $ne: username }},
+                { hiddenFrom: { $ne: username }},
                 { 'location.coordinates.0':  { $gt: minLng }},
                 { 'location.coordinates.0':  { $lt: maxLng }},
                 { 'location.coordinates.1':  { $gt: minLat }},

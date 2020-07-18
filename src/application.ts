@@ -2,9 +2,9 @@ import express from 'express'
 
 import authenticationRouter from './authentication/authentication.route'
 import privacyRouter from './privacy/privacy.route'
-import userRouter from './authentication/user.route'
+import userRouter from './authentication/authentication.middleware'
 
-import { getDatabase } from './common/database'
+import { getDatabase } from './database'
 import passport from 'passport'
 
 const application = express()

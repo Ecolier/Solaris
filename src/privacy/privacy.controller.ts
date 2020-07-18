@@ -1,10 +1,11 @@
 import { Collection } from 'mongodb'
 import { User } from '../models/user'
 import { Stranger } from '../models/stranger'
+import { getUserCollection } from '../database'
  
 export class PrivacyController {
 
-    constructor (private readonly collection: Collection) { }
+    private readonly collection = getUserCollection()
 
     async setSeenBy (username: string, targetUsername: string) {
         this.collection.updateOne({

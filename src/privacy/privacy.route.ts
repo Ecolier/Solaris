@@ -1,33 +1,47 @@
 import { Router } from 'express'
 import { PrivacyController } from './privacy.controller'
+import passport from 'passport'
+import { getUserCollection, getDatabase } from '../database'
+import { User } from '../models/user'
 
 const privacyRouter = Router()
 
-privacyRouter.post('/mode', async (req, res, next) => {
+privacyRouter.post('/mode', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
 
-    const privacyController = new PrivacyController(res.locals.userCollection)
+    const privacyController = new PrivacyController()
+
+    if (typeof req.user === 'undefined') {
+        return
+    } 
+
+    const user = req.user as User
+    const target = req.body.target
 
     switch (req.body.mode) {
         case 'hidden': { 
-            privacyController.setHiddenFrom(res.locals.user, req.body.target) 
+            privacyController.setHiddenFrom(user.username, target) 
             break
         }
         case 'visible': { 
-            privacyController.setVisibleBy(res.locals.user, req.body.target) 
+            privacyController.setVisibleBy(user.username, target) 
             break
         }
     }
 
 })
 
-privacyRouter.get('/mode', async (req, res, next) => {
+privacyRouter.get('/mode', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
 
-    if (typeof req.query.target !== 'string') {
+    if (typeof req.query.target !== 'string' ||
+        typeof req.user === 'undefined') {
         return res.status(400).send()
     }
 
-    const privacyController = new PrivacyController(res.locals.userCollection)
-    const isHiddenFromUser = await privacyController.isHiddenFrom(res.locals.user, req.query.target)
+    const user = req.user as User
+    const target = req.query.target
+
+    const privacyController = new PrivacyController()
+    const isHiddenFromUser = await privacyController.isHiddenFrom(user.username, target)
 
     return res.send(isHiddenFromUser)
 
@@ -35,7 +49,7 @@ privacyRouter.get('/mode', async (req, res, next) => {
 
 privacyRouter.get('/hidden', async (req, res, next) => {
 
-    const privacyController = new PrivacyController(res.locals.userCollection)
+    const privacyController = new PrivacyController()
 
 
 })

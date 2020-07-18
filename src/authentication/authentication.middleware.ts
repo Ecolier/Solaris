@@ -3,7 +3,7 @@ import { AuthenticationController } from './authentication.controller'
 
 import passport from 'passport'
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt'
-import { getDatabase } from '../common/database'
+import { getDatabase } from '../database'
 
 const userRouter = Router()
 
@@ -16,7 +16,7 @@ passport.use(new JWTStrategy({
         return done("error")
     }
 
-    const authenticationController = new AuthenticationController(getDatabase().collection('user'))
+    const authenticationController = new AuthenticationController()
     const user = await authenticationController.findUser(payload.username)
 
     return done(null, user)

@@ -1,4 +1,4 @@
-const { box } = require('../../dist/geography')
+const { box } = require('../../dist/common/geography')
 
 module.exports = (longitude, latitude, distance) => {
 

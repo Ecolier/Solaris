@@ -7,17 +7,10 @@ io.connect()
 
 Axios.get('http://localhost:5000/auth/register').then((response) => {
 
-    const user = response.data
-
-    console.log(user)
-
     const random = randomLocation(config.longitude, config.latitude, 1)
 
-    console.log(random)
-
     io.emit('update location', {
-        username: user.username,
-        password: user.password,
+        token: response.data.token,
         longitude: random.longitude,
         latitude: random.latitude
     })
