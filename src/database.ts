@@ -1,4 +1,5 @@
-import { MongoClient, Db } from 'mongodb'
+import { MongoClient, Db, Collection } from 'mongodb'
+import { User } from './models/user'
 
 var _database: Db
 
@@ -11,7 +12,12 @@ const getDatabase = (): Db => {
     return _database
 }
 
+const getUserCollection = (): Collection => {
+    return _database.collection('user')
+}
+
 export { 
     getDatabase, 
+    getUserCollection,
     connect
 }
