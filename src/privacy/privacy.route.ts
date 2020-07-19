@@ -6,7 +6,7 @@ import { User } from '../models/user'
 
 const privacyRouter = Router()
 
-privacyRouter.post('/mode', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+privacyRouter.post('/mode', async (req, res, next) => {
 
     const privacyController = new PrivacyController()
 
@@ -30,7 +30,7 @@ privacyRouter.post('/mode', passport.authenticate('jwt', { session: false }), as
 
 })
 
-privacyRouter.get('/mode', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+privacyRouter.get('/mode', async (req, res, next) => {
 
     if (typeof req.query.target !== 'string' ||
         typeof req.user === 'undefined') {

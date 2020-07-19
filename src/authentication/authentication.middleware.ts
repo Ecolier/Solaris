@@ -1,9 +1,7 @@
 import { Router } from 'express'
 import { AuthenticationController } from './authentication.controller'
-
 import passport from 'passport'
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt'
-import { getDatabase } from '../database'
 
 const userRouter = Router()
 
@@ -21,5 +19,9 @@ passport.use(new JWTStrategy({
 
     return done(null, user)
 }))
+
+userRouter.use('/', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+    return next()
+})
 
 export default userRouter
