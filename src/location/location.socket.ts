@@ -5,6 +5,7 @@ import { Socket } from 'socket.io'
 import { PrivacyController } from '../privacy/privacy.controller'
 import * as jwt from 'jsonwebtoken'
 import { UserPayload } from '../models/user-payload'
+import { authenticate } from '../authentication/authentication.socket'
 
 // inefficient but simple way to hash string arrays
 var hashStringArray = function(...strings: string[]) {
@@ -19,29 +20,17 @@ var hashStringArray = function(...strings: string[]) {
  */
 export default async (socket: Socket, request: any) => {
 
-    if (typeof request.token !== 'string' ||
-        typeof request.latitude !== 'number' ||
+    const result = await authenticate(socket, request)
+    if ('name' in result) { return socket.emit(result.name, result.description) }
+
+    if (typeof request.latitude !== 'number' ||
         typeof request.longitude !== 'number') {
         socket.emit('error', { description: 'malformed request' })
     }
 
-    if (typeof process.env.JWT_KEY !== 'string') {
-        throw 'JWT_KEY is not setup properly'
-    }
-
-    const token = request.token
-    const key = process.env.JWT_KEY
+    const user = result
     const longitude = request.longitude
     const latitude = request.latitude
-
-    // Extract payload which contains the username and try to find the user
-    const payload = jwt.verify(token, key) as UserPayload
-    const authenticationController = new AuthenticationController()
-    const user = await authenticationController.findUser(payload.username)
-
-    if (!user) {
-        return socket.emit('error', { description: 'authentication error' })
-    }
 
     // Update user location
     const locationController = new LocationController()
