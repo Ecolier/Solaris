@@ -4,7 +4,7 @@ import { User } from './models/user'
 var _database: Db
 
 const connect = async () => {
-    const client = await new MongoClient('mongodb://localhost:27017').connect()
+    const client = await new MongoClient('mongodb://root:example@172.25.0.2:27017/', {useUnifiedTopology: true}).connect()
     _database = client.db('test')
 }
 

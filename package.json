@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "dev:watch": "DEBUG=khari yarn nodemon",
     "debug": "DEBUG=khari ./bin/start"
   },
   "dependencies": {
@@ -16,9 +17,9 @@
     "@types/mongodb": "3.5.25",
     "@types/node": "14.0.23",
     "@types/passport": "1.0.4",
+    "@types/passport-jwt": "3.0.1",
     "@types/passport-local": "1.0.33",
     "@types/socket.io": "2.1.8",
-    "@types/passport-jwt": "3.0.1",
     "axios": "0.19.2",
     "bcrypt": "5.0.0",
     "body-parser": "1.19.0",
@@ -28,10 +29,14 @@
     "jsonwebtoken": "8.5.1",
     "mongodb": "3.5.9",
     "passport": "0.4.1",
-    "passport-local": "1.0.0",
     "passport-jwt": "4.0.0",
+    "passport-local": "1.0.0",
     "socket.io": "^2.3.0",
     "socket.io-client": "2.3.0",
     "typescript": "3.9.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1"
   }
 }
