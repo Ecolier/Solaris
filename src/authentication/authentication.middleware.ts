@@ -2,7 +2,13 @@ import { Router } from 'express'
 import { AuthenticationController } from './authentication.controller'
 import passport from 'passport'
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt'
+import { Routable } from '../core/routable'
 
+export class AuthenticationMiddleware {
+    
+}
+
+/** 
 const userRouter = Router()
 
 passport.use(new JWTStrategy({ 
@@ -25,3 +31,5 @@ userRouter.use('/', passport.authenticate('jwt', { session: false }), (req, res,
 })
 
 export default userRouter
+
+*/

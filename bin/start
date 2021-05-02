@@ -1,11 +1,5 @@
 #!/usr/bin/env node
 
 require('dotenv').config();
-const { ApplicationModule } = require('../src/application.module');
-const { DatabaseService } = require('../src/database.service');
-const { SocketService } = require('../src/socket.service');
 
-new ApplicationModule(
-    new DatabaseService('host.docker.internal', 27017, 'root', 'example', 'test'),
-    new SocketService()
-).start();
+const { ApplicationEntry } = require('../src/application.entry');
