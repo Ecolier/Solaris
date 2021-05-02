@@ -1,7 +1,7 @@
 import { Collection } from 'mongodb'
 import { User } from '../models/user'
 import { Stranger } from '../models/stranger'
-import { getUserCollection } from '../database'
+import { getUserCollection } from '../database.service'
  
 export class PrivacyController {
 

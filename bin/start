@@ -1,17 +1,11 @@
 #!/usr/bin/env node
 
-require('dotenv').config()
-const debug = require('debug')('khari')
+require('dotenv').config();
+const { ApplicationModule } = require('../src/application.module');
+const { DatabaseService } = require('../src/database.service');
+const { SocketService } = require('../src/socket.service');
 
-const server = require('http').createServer(
-    require('../src/application').default
-)
-
-const io = require('socket.io')(server)
-io.on('connect', require('../src/socket').onConnected)
-
-require('../src/database').connect().then(() => {
-    server.listen(8082, () => {
-        debug(`application listening on port 5000`)
-    })
-})
+new ApplicationModule(
+    new DatabaseService('host.docker.internal', 27017, 'root', 'example', 'test'),
+    new SocketService()
+).start();

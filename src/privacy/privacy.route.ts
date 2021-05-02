@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { PrivacyController } from './privacy.controller'
 import passport from 'passport'
-import { getUserCollection, getDatabase } from '../database'
+import { getUserCollection, getDatabase } from '../database.service'
 import { User } from '../models/user'
 
 const privacyRouter = Router()

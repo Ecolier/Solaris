@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io'
-import { authenticate } from '../authentication/authentication.socket'
+import { authenticate } from '../user.model.ts/authentication.socket'
 
 export const createChatroom = async (socket: Socket, request: any) => {
     const result = await authenticate(socket, request)

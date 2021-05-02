@@ -3,22 +3,32 @@ import { randomBytes } from 'crypto'
 import { Collection } from 'mongodb'
 import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
-import { getUserCollection } from '../database'
- 
+import { NextFunction, Request, Response } from 'express'
+
+
+export class AuthenticationController {
+  async register(req: Request, res: Response, next: NextFunction) {
+    console.log('register');
+  }
+  async login(req: Request, res: Response, next: NextFunction) {
+    console.log('login');
+  }
+}
+
+
+/**
 export class AuthenticationController {
 
-    private readonly collection = getUserCollection()
-
     async register (): Promise<any> {
-    
+
+
         const username = randomBytes(4).toString('hex')
         const password = bcrypt.hashSync(randomBytes(4).toString('hex'), 10)
-            
+
         this.collection.insertOne({
             username: username,
             password: password,
         })
-        
 
         if (typeof process.env.JWT_KEY !== 'string') {
             return
@@ -29,13 +39,13 @@ export class AuthenticationController {
     }
 
     async findUser (username: string): Promise<User | void> {
-        
+
         const result = await this.collection.findOne({
-            username: username 
+            username: username
         })
-    
+
         if (result == null) { return }
-    
+
         return {
             username: result.username,
             longitude: result.location?.coordinates[0] ?? 0,
@@ -52,16 +62,16 @@ export class AuthenticationController {
                 { password: password },
             ]
         })
-    
+
         if (result == null) { return }
-    
+
         return {
             username: result.username,
             longitude: result.location?.coordinates[0] ?? 0,
             latitude: result.location?.coordinates[1] ?? 0,
             hiddenFrom: result.hiddenFrom ?? []
         }
-    
+
     }
 
-}
+} */

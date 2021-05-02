@@ -1,11 +1,11 @@
-import { AuthenticationController } from '../authentication/authentication.controller'
+import { AuthenticationController } from '../user.model.ts/authentication.controller'
 import { LocationController } from '../location/location.controller'
 import { box } from '../common/geography'
 import { Socket } from 'socket.io'
 import { PrivacyController } from '../privacy/privacy.controller'
 import * as jwt from 'jsonwebtoken'
 import { UserPayload } from '../models/user-payload'
-import { authenticate } from '../authentication/authentication.socket'
+import { authenticate } from '../user.model.ts/authentication.socket'
 
 // inefficient but simple way to hash string arrays
 var hashStringArray = function(...strings: string[]) {
