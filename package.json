@@ -7,8 +7,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev:watch": "DEBUG=khari yarn nodemon",
-    "debug": "DEBUG=khari ./bin/start"
+    "dev:watch": "DEBUG=solaris:* yarn nodemon",
+    "debug": "DEBUG=solaris:* ./bin/start"
   },
   "dependencies": {
     "@types/bcrypt": "3.0.1",

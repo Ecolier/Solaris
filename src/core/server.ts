@@ -1,5 +1,6 @@
 import { BehaviorSubject, Subject } from 'rxjs';
 import { createServer as createHttpServer } from 'http';
+import { Constructor } from './types';
 import { Route } from './route';
 
 export enum State {
@@ -22,28 +23,26 @@ export type Status = ActiveStatus | IdleStatus;
 
 export interface Server {
   readonly status: BehaviorSubject<Status>;
-  readonly routes: Subject<Route>;
+  use(route: Route): void;
   start(host: string, port: number): void;
-  registerRoutes(routes: Route[]): void;
-  registerRoute(route: Route): void;
 }
 
-export class BaseServer implements Server {
+export abstract class BaseServer implements Server {
   status = new BehaviorSubject<Status>({ state: State.Idle });
-  routes = new Subject<Route>();
 
   readonly httpServer = createHttpServer();
+  public readonly host: string;
+  public readonly port: number;
 
-  registerRoutes(routes: Route[]) {
-    routes.forEach(route => this.routes.next(route));
+  constructor(params: { host: string, port: number }) {
+    this.host = params.host;
+    this.port = params.port;
   }
 
-  registerRoute(route: Route) {
-    this.routes.next(route);
-  }
+  use(route: Route) {}
 
-  start(host: string, port: number) {
-    this.status.next({ state: State.Starting, host: host, port: port })
-    this.httpServer.listen(8082, () => this.status.next({ state: State.Running, host: host, port: port }));
+  start() {
+    this.status.next({ state: State.Starting, host: this.host, port: this.port })
+    this.httpServer.listen(8082, this.host, () => this.status.next({ state: State.Running, host: this.host, port: this.port }));
   }
 }

@@ -1,5 +1,5 @@
 {
-    "include": ["src/application.controller.ts"],
+    "include": ["src/main.ts"],
     "compilerOptions": {
         "outDir": "dist",
         "strict": true,

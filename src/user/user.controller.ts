@@ -1,24 +1,32 @@
-import { User } from '../models/user'
-import { randomBytes } from 'crypto'
-import { Collection } from 'mongodb'
-import * as bcrypt from 'bcrypt'
-import * as jwt from 'jsonwebtoken'
-import { NextFunction, Request, Response, Router } from 'express'
-import { DatabaseService } from '../database.service'
+import { NextFunction, Request, RequestHandler, Response } from "express";
+import { Routable, Route } from "../core/route";
+import { DatabaseService } from "../database.service";
+import { SocketService } from "../socket.service";
+import { UserService } from './user.service';
 
+export class AuthenticationController implements Routable {
 
-export class AuthenticationController {
-  
-  constructor(private databaseService: DatabaseService) {
+  private userService = new UserService(this.databaseService);
 
+  private _routes: Route<RequestHandler>[] = [
+    { path: '/login', method: 'get', action: this.login.bind(this) },
+    { path: '/register', method: 'get', action: this.register.bind(this) }
+  ];
+
+  getRoutes() {
+    return this._routes;
   }
-  
-  async register(req: Request, res: Response, next: NextFunction) {
-    console.log(this.databaseService);
+
+  constructor(
+    private databaseService: DatabaseService,
+    private socketService: SocketService) {}
+
+  login(req: Request, res: Response, next: NextFunction) {
+    
   }
 
-  async login(req: Request, res: Response, next: NextFunction) {
-    console.log('login');
+  register(req: Request, res: Response, next: NextFunction) {
+    res.send(this.userService.createUser());
   }
 }
 
@@ -29,19 +37,7 @@ export class AuthenticationController {
   async register (): Promise<any> {
     
     
-    const username = randomBytes(4).toString('hex')
-    const password = bcrypt.hashSync(randomBytes(4).toString('hex'), 10)
     
-    this.collection.insertOne({
-      username: username,
-      password: password,
-    })
-    
-    if (typeof process.env.JWT_KEY !== 'string') {
-      return
-    }
-    
-    return jwt.sign({ username: username }, process.env.JWT_KEY)
     
   }
   
